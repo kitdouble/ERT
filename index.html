@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My experiment</title>
+    <script src="http://cogflex.com.au/jspsych/jspsych 7.1/dist/jspsych.js"></script>
+    <script src="http://cogflex.com.au/jspsych/jspsych 7.1/dist/plugin-image-keyboard-response.js"></script>
+    <script src="http://cogflex.com.au/jspsych/jspsych 7.1/dist/plugin-preload.js"></script>
+    <script src="custom-plugins/matching.js"></script>
+    <link href="http://cogflex.com.au/jspsych/jspsych 7.1/dist/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="custom-plugins/strat-selection-image.js"></script>
+    <script src="custom-plugins/strat-selection-text.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body></body>
+  <script>
+    const jsPsych = initJsPsych();
+
+
+// Trials that give the appearance of matching the subject with their partner
+    const hello_trial = {
+      type: matching,
+      stimulus: 'Matching you with a partner....',
+      spinner: "warning",
+      choices: "NO_KEYS",
+      trial_duration: 3000
+    }
+
+    const matched_trial = {
+      type: matching,
+      stimulus: 'Matched!',
+      spinner: "success",
+      choices: "NO_KEYS",
+      trial_duration: 1000
+    }
+
+
+// Preload
+
+var preload = {
+    type: jsPsychPreload,
+    images: ['img/1.png','img/2.png', 'img/3.png', 'img/4.png', 'img/5.png', 'img/6.png', 'img/7.png', 'img/8.png', 'img/9.png', 'img/10.png']
+}
+
+// Stategy Selection
+
+
+
+const selection = {
+  type: stratSelectionText,
+  stimulus: '<h2>Help your partner</h2><p>Your partner is about to see another negative image</p><p>Use any option below <strong>to provide advice</strong> to help your partner feel better:</p>',
+  spinner: "warning",
+  choices: ["Try to think about something else", "You're doing great!"],
+  trial_duration: 8000,
+  response_ends_trial: true
+}
+
+const viewing = {
+  type: matching,
+  stimulus: 'Your partner is viewing the image',
+  spinner: "muted",
+  choices: "NO_KEYS",
+  trial_duration: function(){
+    x = jsPsych.randomization.sampleWithReplacement([4000,5000, 6000, 7000, 8000, 9000, 10000], 1)
+    return(x)
+  }
+}
+
+
+const feedback = {
+    type: jsPsychImageKeyboardResponse,
+    stimulus: function(){
+      x = jsPsych.randomization.sampleWithReplacement(['img/1.png','img/2.png', 'img/3.png', 'img/4.png', 'img/5.png', 'img/6.png', 'img/7.png', 'img/8.png', 'img/9.png', 'img/10.png'], 1)
+      return(x)
+    },
+    choices: "NO_KEYS",
+    prompt: "<p>This is how your partner indicated feeling</p>",
+    trial_duration: 2000,
+    stimulus_height: 150,
+    stimulus_width: 100
+
+};
+
+
+const compete_trial ={
+  timeline: [selection, viewing, feedback],
+  repetitions: 100
+}
+
+
+
+
+//
+
+    jsPsych.run([preload, hello_trial, matched_trial,compete_trial]);
+  </script>
+</html>
