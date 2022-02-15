@@ -1,2 +1,2 @@
-# ERT
-The Emotion Regulation Task
+# Sham Extrinsic Regulation Task (ERT)
+
