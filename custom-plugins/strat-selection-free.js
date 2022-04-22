@@ -1,3 +1,17 @@
+// Function to count characters
+function textCounter(field1, field2)
+{
+var N = field2;
+if(field1.value.length > N) {
+$("#remainingC").html("<p style = 'color:#ff0000;'>characters remaining: " + (N - field1.value.length));
+$("#jspsych-survey-text-next").prop('disabled', true);
+
+} else {
+$("#jspsych-survey-text-next").prop('disabled', false);
+$("#remainingC").html("characters remaining: " + (N - field1.value.length));
+}}
+
+
 var stratFreeResponse = (function (jspsych) {
   'use strict';
 
@@ -159,7 +173,7 @@ var stratFreeResponse = (function (jspsych) {
 
 
                   html +=
-                      '<textarea onkeyup="textCounter(this)"; id="input-' +
+                      '<textarea onpaste="return false;" onkeyup="textCounter(this,'+trial.maxCharacters+')"; id="input-' +
                           question_index +
                           '" name="#jspsych-survey-text-response-' +
                           question_index +
@@ -199,6 +213,47 @@ var stratFreeResponse = (function (jspsych) {
 
           // backup in case autofocus doesn't work
           display_element.querySelector("#input-" + question_order[0]).focus();
+
+
+
+
+const timeOut =  function(){
+  var endTime = performance.now();
+  var response_time = Math.round(endTime - startTime);
+
+  // create object to hold responses
+  var question_data = {};
+  for (var index = 0; index < trial.questions.length; index++) {
+      var id = "Q" + index;
+      var q_element = document
+          .querySelector("#jspsych-survey-text-" + index)
+          .querySelector("textarea, input");
+      var val = q_element.value;
+      var name = q_element.attributes["data-name"].value;
+      if (name == "") {
+          name = id;
+      }
+      var obje = {};
+      obje[name] = val;
+      Object.assign(question_data, obje);
+  }
+
+  // save data
+  var trialdata = {
+      rt: response_time,
+      response: question_data,
+  };
+  display_element.innerHTML = "";
+  // next trial
+jsPsych.finishTrial(trialdata);
+
+
+}
+
+
+setTimeout( function() { timeOut(); }, trial.trial_duration);
+
+
           display_element.querySelector("#jspsych-survey-text-form").addEventListener("submit", (e) => {
               e.preventDefault();
               // measure response time
@@ -238,6 +293,17 @@ var stratFreeResponse = (function (jspsych) {
           });
           var startTime = performance.now();
       }
+
+
+
+
+
+
+
+
+
+
+
       simulate(trial, simulation_mode, simulation_options, load_callback) {
           if (simulation_mode == "data-only") {
               load_callback();
