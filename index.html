@@ -4,11 +4,13 @@
     <title>My experiment</title>
     <script src="http://cogflex.com.au/jspsych/jspsych 7.1/dist/jspsych.js"></script>
     <script src="http://cogflex.com.au/jspsych/jspsych 7.1/dist/plugin-image-keyboard-response.js"></script>
+    <script src="http://cogflex.com.au/jspsych/jspsych 7.1/dist/plugin-survey-text.js"></script>
     <script src="http://cogflex.com.au/jspsych/jspsych 7.1/dist/plugin-preload.js"></script>
     <script src="custom-plugins/matching.js"></script>
     <link href="http://cogflex.com.au/jspsych/jspsych 7.1/dist/jspsych.css" rel="stylesheet" type="text/css" />
     <script src="custom-plugins/strat-selection-image.js"></script>
     <script src="custom-plugins/strat-selection-text.js"></script>
+    <script src="custom-plugins/strat-selection-free.js"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
@@ -47,9 +49,7 @@ var preload = {
 
 // Stategy Selection
 
-
-
-const selection = {
+const selection_buttons = {
   type: stratSelectionText,
   stimulus: '<h2>Help your partner</h2><p>Your partner is about to see another negative image</p><p>Use any option below <strong>to provide advice</strong> to help your partner feel better:</p>',
   spinner: "warning",
@@ -57,6 +57,33 @@ const selection = {
   trial_duration: 8000,
   response_ends_trial: true
 }
+
+const selectionx = {
+  type: stratFreeResponse,
+  stimulus: '<h2>Help your partner</h2><p>Your partner is about to see another negative image</p><p>Use any option below <strong>to provide advice</strong> to help your partner feel better:</p>',
+  spinner: "warning",
+  choices: ["Try to think about something else", "You're doing great!"],
+  trial_duration: 8000,
+  response_ends_trial: true
+}
+
+
+// Function to count characters
+function textCounter(field1)
+{
+$("#remainingC").html("characters remaining: " + (160 - field1.value.length));
+}
+
+
+const selection = {
+  type: stratFreeResponse,
+  questions: [
+    {rows: 2, prompt: "<h2>Help your partner</h2><p>Your partner is about to see another negative image</p><p>Use the textbox below <strong>to provide advice</strong> or you can <strong>leave it blank if you don't want to provide advice</strong>:</p>"}
+  ],
+  button_label: "Submit",
+
+}
+
 
 const viewing = {
   type: matching,
