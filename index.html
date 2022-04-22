@@ -71,8 +71,15 @@ const selectionx = {
 // Function to count characters
 function textCounter(field1)
 {
-$("#remainingC").html("characters remaining: " + (160 - field1.value.length));
-}
+var N = 6
+if(field1.value.length > N) {
+$("#remainingC").html("<p style = 'color:#ff0000;'>characters remaining: " + (N - field1.value.length));
+$("#jspsych-survey-text-next").prop('disabled', true);
+
+} else {
+$("#jspsych-survey-text-next").prop('disabled', false);
+$("#remainingC").html("characters remaining: " + (N - field1.value.length));
+}}
 
 
 const selection = {
@@ -81,6 +88,7 @@ const selection = {
     {rows: 2, prompt: "<h2>Help your partner</h2><p>Your partner is about to see another negative image</p><p>Use the textbox below <strong>to provide advice</strong> or you can <strong>leave it blank if you don't want to provide advice</strong>:</p>"}
   ],
   button_label: "Submit",
+  maxCharacters: 6
 
 }
 

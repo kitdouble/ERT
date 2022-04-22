@@ -176,7 +176,7 @@ var stratFreeResponse = (function (jspsych) {
                           ' placeholder="' +
                           question.placeholder +
                           '"></textarea><br>' +
-                          "<span id='remainingC'>characters remaining: 160</span>"
+                          "<span id='remainingC'>characters remaining: " + trial.maxCharacters+ "</span>"
               }
               html += "</div>";
           }
